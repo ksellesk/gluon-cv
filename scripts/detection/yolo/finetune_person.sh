@@ -1,0 +1,1 @@
+python3 finetune_person.py --network darknet53 --dataset coco --resume ./yolo3_darknet53_custom_best.params --gpus 0,1,2,3,4,5,6,7 --batch-size 64 -j 24 --log-interval 100 --lr 0.0001 --lr-decay-epoch 20,40 --epochs 60 --syncbn 2>&1 | tee ahead_train.log
