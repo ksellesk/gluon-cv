@@ -75,7 +75,8 @@ def get_dataloader(val_dataset, data_shape, batch_size, num_workers):
 def validate(mod, val_data, ctx, classes, size, metric):
     """Test on validation dataset."""
     metric.reset()
-    with tqdm(total=size) as pbar:
+    count = 0
+    with tqdm(total=10) as pbar:
         tic = time.time()
         num = 0
         for batch in val_data:
@@ -91,7 +92,10 @@ def validate(mod, val_data, ctx, classes, size, metric):
             print(det_bboxes.shape, det_ids.shape, det_scores.shape, gt_bboxes.shape, gt_ids.shape)
 
             metric.update(det_bboxes, det_ids, det_scores, gt_bboxes, gt_ids)
-            pbar.update(batch[0].shape[0])
+            pbar.update(1)
+            count += 1
+            if count == 10:
+                break
     return metric.get()
 
 if __name__ == '__main__':
@@ -102,7 +106,8 @@ if __name__ == '__main__':
     ctx = ctx if ctx else [mx.cpu()]
 
     # network
-    prefix, epoch = "yolo3_person-quantized", 0
+    prefix, epoch = "yolo3_person-quantized-20batches-naive", 0
+    #prefix, epoch = "yolo3_person-quantized", 0
     sym, arg_params, aux_params = mx.model.load_checkpoint(prefix, epoch)
     mod = mx.mod.Module(symbol=sym, context=ctx, label_names=None)
     mod.bind(for_training=False,
