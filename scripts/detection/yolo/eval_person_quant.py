@@ -76,7 +76,7 @@ def validate(mod, val_data, ctx, classes, size, metric):
     """Test on validation dataset."""
     metric.reset()
     count = 0
-    with tqdm(total=10) as pbar:
+    with tqdm(total=size) as pbar:
         tic = time.time()
         num = 0
         for batch in val_data:
@@ -92,10 +92,11 @@ def validate(mod, val_data, ctx, classes, size, metric):
             print(det_bboxes.shape, det_ids.shape, det_scores.shape, gt_bboxes.shape, gt_ids.shape)
 
             metric.update(det_bboxes, det_ids, det_scores, gt_bboxes, gt_ids)
-            pbar.update(1)
+            pbar.update(batch[0].shape[0])
+            #pbar.update(1)
             count += 1
-            if count == 10:
-                break
+            #if count == 10:
+            #    break
     return metric.get()
 
 if __name__ == '__main__':
