@@ -39,8 +39,8 @@ class PersonDetection(VisionDataset):
     """
     CLASSES = ['person']
 
-    def __init__(self, root=os.path.join('~', '.mxnet', 'datasets', 'coco'),
-                 splits=('instances_val2017',), transform=None, min_object_area=0,
+    def __init__(self, root="/lustre/atlas/zhengdc/data/cv/coco/",
+                 splits=('person_val2017',), transform=None, min_object_area=0,
                  skip_empty=True, use_crowd=True):
         super(PersonDetection, self).__init__(root)
         self._root = os.path.expanduser(root)
